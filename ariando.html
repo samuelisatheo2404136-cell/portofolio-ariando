@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ariando Ariel Christian — Portfolio</title>
+  <meta name="description" content="Portofolio Ariando Ariel Christian, mahasiswa D3 Akuntansi Politeknik Negeri Malang. Open to internship." />
+  <meta name="theme-color" content="#0f766e" />
+  <meta property="og:title" content="Ariando Ariel Christian — Portfolio" />
+  <meta property="og:description" content="Mahasiswa D3 Akuntansi Polinema: pencatatan keuangan, analisis data, dan administrasi organisasi." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f766e'/><text x='50' y='66' font-size='52' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='white'>A</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fafaf7; --bg-alt: #f2f2ec; --surface: #ffffff;
+      --text: #1c1917; --muted: #57534e; --line: #e7e5e4;
+      --accent: #0f766e; --accent-2: #14b8a6; --accent-soft: #ccfbf1; --accent-dark: #115e59;
+      --radius: 18px; --shadow: 0 1px 2px rgba(0,0,0,.04), 0 10px 30px rgba(0,0,0,.07);
+      --glow: rgba(20,184,166,.18);
+    }
+    [data-theme="dark"] {
+      --bg: #0b1110; --bg-alt: #0f1816; --surface: #131d1b;
+      --text: #ecf5f3; --muted: #9db3ae; --line: #1f2f2c;
+      --accent: #2dd4bf; --accent-2: #5eead4; --accent-soft: #123a35; --accent-dark: #0d2b27;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.45);
+      --glow: rgba(45,212,191,.14);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text);
+      line-height: 1.65; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+      transition: background .4s, color .4s;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1100px, 100% - 40px); margin-inline: auto; }
+    section { padding: 96px 0; position: relative; }
+    .eyebrow { font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    h1, h2, h3 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; line-height: 1.15; }
+    h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); margin-bottom: 36px; max-width: 20ch; }
+    em { color: var(--accent); font-style: italic; }
+
+    /* progress + cursor glow */
+    #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 100; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    #cursorGlow {
+      position: fixed; width: 420px; height: 420px; border-radius: 50%; pointer-events: none; z-index: 0;
+      background: radial-gradient(circle, var(--glow), transparent 65%);
+      transform: translate(-50%, -50%); left: -500px; top: -500px; transition: opacity .3s;
+    }
+    main, header, footer { position: relative; z-index: 1; }
+
+    /* NAV */
+    header { position: sticky; top: 0; z-index: 60; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 1.3rem; }
+    .logo span { color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-links { display: flex; gap: 6px; list-style: none; align-items: center; }
+    .nav-links a:not(.btn) { font-size: .9rem; color: var(--muted); padding: 8px 14px; border-radius: 999px; transition: all .2s; }
+    .nav-links a:not(.btn):hover { color: var(--text); background: var(--bg-alt); }
+    .nav-links a.active { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; font-size: 1.05rem; display: grid; place-items: center; transition: transform .25s, border-color .2s; }
+    .icon-btn:hover { transform: rotate(18deg) scale(1.08); border-color: var(--accent); }
+    .menu-btn { display: none; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: 999px; font-weight: 600; font-size: .92rem; border: 1.5px solid var(--accent); transition: all .25s; cursor: pointer; font-family: inherit; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    [data-theme="dark"] .btn-primary { color: #04201c; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px var(--glow); filter: brightness(1.08); }
+    .btn-ghost { color: var(--accent); background: transparent; }
+    .btn-ghost:hover { background: var(--accent-soft); transform: translateY(-2px); }
+    .nav-cta { padding: 9px 18px; font-size: .85rem; }
+
+    /* HERO */
+    .hero { padding: 70px 0 100px; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .5; z-index: 0; animation: float 14s ease-in-out infinite; }
+    .blob.b1 { width: 380px; height: 380px; background: var(--accent-soft); top: -80px; right: -60px; }
+    .blob.b2 { width: 280px; height: 280px; background: var(--glow); bottom: -60px; left: -40px; animation-delay: -6s; }
+    @keyframes float { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,-24px) scale(1.08); } }
+    .hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; align-items: center; position: relative; z-index: 1; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: var(--accent-soft); color: var(--accent); padding: 7px 15px; border-radius: 999px; font-size: .8rem; font-weight: 600; margin-bottom: 22px; }
+    .badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--accent); } 70% { box-shadow: 0 0 0 9px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+    .hello { color: var(--muted); font-size: 1.05rem; margin-bottom: 4px; }
+    h1 { font-size: clamp(2.6rem, 6.4vw, 4.7rem); margin-bottom: 14px; }
+    h1 .grad { background: linear-gradient(120deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .typing { font-size: 1.25rem; font-weight: 600; min-height: 2em; margin-bottom: 14px; }
+    .typing .role { color: var(--accent); }
+    .caret { display: inline-block; width: 2px; height: 1.1em; background: var(--accent); margin-left: 3px; vertical-align: -3px; animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .lead { color: var(--muted); font-size: 1.06rem; max-width: 52ch; margin-bottom: 28px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 42px; }
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; }
+    .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 20px; min-width: 112px; transition: transform .25s, border-color .25s; }
+    .stat:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .stat b { display: block; font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent); line-height: 1.1; }
+    .stat span { font-size: .78rem; color: var(--muted); }
+
+    .photo-wrap { position: relative; justify-self: center; width: min(350px, 100%); perspective: 900px; }
+    .photo { aspect-ratio: 4/5; border-radius: 30px; overflow: hidden; position: relative; background: linear-gradient(145deg, var(--accent-soft), var(--bg-alt)); border: 1px solid var(--line); box-shadow: var(--shadow); transition: transform .15s ease-out; transform-style: preserve-3d; display: grid; place-items: center; color: var(--muted); text-align: center; padding: 20px; }
+    .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 18%; }
+    .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 70%, rgba(0,0,0,.18)); pointer-events: none; }
+    .photo-ring { position: absolute; inset: -14px; border-radius: 38px; border: 2px dashed var(--accent); opacity: .35; animation: spin 40s linear infinite; z-index: -1; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .float-tag { position: absolute; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); border-radius: 14px; padding: 10px 15px; font-size: .8rem; font-weight: 600; animation: bob 5s ease-in-out infinite; z-index: 2; }
+    .tag-1 { left: -26px; bottom: 60px; }
+    .tag-2 { right: -18px; top: 34px; animation-delay: -2.5s; }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+
+    /* MARQUEE */
+    .marquee { border-block: 1px solid var(--line); background: var(--bg-alt); overflow: hidden; padding: 16px 0; }
+    .marquee-track { display: flex; gap: 48px; width: max-content; animation: scroll 28s linear infinite; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    .marquee span { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--muted); white-space: nowrap; }
+    .marquee span::before { content: "✦"; color: var(--accent); margin-right: 48px; }
+    @keyframes scroll { to { transform: translateX(-50%); } }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px; align-items: start; }
+    .about-grid p { color: var(--muted); margin-bottom: 16px; }
+    .info-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 24px; box-shadow: var(--shadow); }
+    .info-row { display: flex; justify-content: space-between; gap: 16px; padding: 15px 0; border-bottom: 1px solid var(--line); font-size: .93rem; transition: padding .2s; }
+    .info-row:hover { padding-left: 8px; }
+    .info-row:last-child { border-bottom: 0; }
+    .info-row span:first-child { color: var(--muted); }
+    .info-row span:last-child { font-weight: 600; text-align: right; }
+    .alt { background: var(--bg-alt); border-block: 1px solid var(--line); }
+
+    /* FILTER */
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .f-btn { border: 1px solid var(--line); background: var(--surface); color: var(--muted); padding: 8px 18px; border-radius: 999px; font-size: .85rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s; }
+    .f-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .f-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    [data-theme="dark"] .f-btn.active { color: #04201c; }
+
+    /* TIMELINE */
+    .timeline { position: relative; display: grid; gap: 16px; padding-left: 34px; }
+    .timeline::before { content: ""; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--accent), transparent); }
+    .t-item { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 26px; cursor: pointer; transition: transform .3s, box-shadow .3s, border-color .3s, opacity .35s; }
+    .t-item::before { content: ""; position: absolute; left: -33px; top: 28px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 3px solid var(--accent); transition: all .25s; }
+    .t-item:hover, .t-item.open { transform: translateX(6px); box-shadow: var(--shadow); border-color: var(--accent); }
+    .t-item:hover::before, .t-item.open::before { background: var(--accent); box-shadow: 0 0 0 6px var(--glow); }
+    .t-item.hide { display: none; }
+    .t-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+    .t-tag { background: var(--accent-soft); color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 8px; }
+    .t-item h3 { font-size: 1.45rem; }
+    .t-org { color: var(--muted); font-size: .92rem; font-weight: 500; }
+    .chev { font-size: 1.3rem; color: var(--accent); transition: transform .3s; flex-shrink: 0; }
+    .t-item.open .chev { transform: rotate(180deg); }
+    .t-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
+    .t-item.open .t-body { grid-template-rows: 1fr; }
+    .t-body > div { overflow: hidden; }
+    .t-body p { color: var(--muted); font-size: .95rem; padding-top: 14px; }
+    .hint { color: var(--muted); font-size: .82rem; margin-top: 16px; }
+
+    /* SKILLS */
+    .tabs { display: inline-flex; gap: 4px; padding: 5px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; margin-bottom: 28px; flex-wrap: wrap; }
+    .tab { border: 0; background: transparent; color: var(--muted); padding: 9px 20px; border-radius: 999px; font-size: .86rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .25s; }
+    .tab.active { background: var(--accent); color: #fff; }
+    [data-theme="dark"] .tab.active { color: #04201c; }
+    .skill-panel { display: none; animation: fadeUp .45s ease; }
+    .skill-panel.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    .skill { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: flex; gap: 14px; align-items: center; transition: transform .25s, border-color .25s, box-shadow .25s; }
+    .skill:hover { transform: translateY(-5px) rotate(-.6deg); border-color: var(--accent); box-shadow: var(--shadow); }
+    .skill .ic { font-size: 1.6rem; width: 48px; height: 48px; display: grid; place-items: center; background: var(--accent-soft); border-radius: 12px; flex-shrink: 0; }
+    .skill b { display: block; font-size: .95rem; }
+    .skill small { color: var(--muted); font-size: .78rem; }
+    .dots { display: flex; gap: 4px; margin-top: 6px; }
+    .dots i { width: 14px; height: 5px; border-radius: 3px; background: var(--line); }
+    .dots i.on { background: var(--accent); }
+
+    /* CERT */
+    .cert { position: relative; overflow: hidden; display: flex; align-items: center; gap: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 30px; transition: transform .3s, box-shadow .3s, border-color .3s; }
+    .cert:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--accent); }
+    .cert::after { content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%; background: linear-gradient(100deg, transparent, var(--glow), transparent); transform: skewX(-20deg); transition: left .8s; }
+    .cert:hover::after { left: 130%; }
+    .cert .medal { font-size: 2.4rem; width: 70px; height: 70px; border-radius: 18px; background: var(--accent-soft); display: grid; place-items: center; flex-shrink: 0; }
+    .cert h3 { font-size: 1.5rem; }
+    .cert p { color: var(--muted); font-size: .93rem; }
+
+    /* CONTACT */
+    .contact-box { background: linear-gradient(135deg, var(--accent-dark), #0b3a36); color: #f0fdfa; border-radius: 30px; padding: clamp(32px, 6vw, 64px); display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; position: relative; overflow: hidden; }
+    [data-theme="dark"] .contact-box { background: linear-gradient(135deg, #0d2b27, #123a35); border: 1px solid var(--line); }
+    .contact-box::before { content: ""; position: absolute; width: 320px; height: 320px; border-radius: 50%; background: rgba(94,234,212,.12); top: -120px; right: -80px; filter: blur(30px); }
+    .contact-box > * { position: relative; }
+    .contact-box .eyebrow { color: #5eead4; }
+    .contact-box h2 { margin-bottom: 16px; }
+    .contact-box em { color: #5eead4; }
+    .contact-box p { color: #ccfbf1; opacity: .9; }
+    .contact-links { display: grid; gap: 12px; }
+    .c-link { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); padding: 15px 20px; border-radius: 14px; font-weight: 500; font-size: .95rem; transition: all .25s; color: inherit; font-family: inherit; cursor: pointer; text-align: left; width: 100%; }
+    .c-link:hover { background: rgba(255,255,255,.18); transform: translateX(6px); }
+    .c-link small { display: block; opacity: .65; font-size: .75rem; font-weight: 400; }
+    .c-link .arr { transition: transform .25s; }
+    .c-link:hover .arr { transform: translateX(4px); }
+
+    footer { text-align: center; padding: 32px 0 48px; color: var(--muted); font-size: .85rem; }
+
+    /* toast + top */
+    #toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 90px); background: var(--text); color: var(--bg); padding: 12px 22px; border-radius: 999px; font-size: .88rem; font-weight: 600; z-index: 120; transition: transform .35s; }
+    #toast.show { transform: translate(-50%, 0); }
+    #toTop { position: fixed; right: 22px; bottom: 22px; z-index: 70; opacity: 0; pointer-events: none; transform: translateY(14px); transition: all .3s; background: var(--accent); color: #fff; border-color: var(--accent); }
+    [data-theme="dark"] #toTop { color: #04201c; }
+    #toTop.show { opacity: 1; pointer-events: auto; transform: none; }
+
+    /* reveal */
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s ease, transform .8s ease; transition-delay: var(--d, 0s); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+    @media (hover: none) { #cursorGlow { display: none; } }
+
+    @media (max-width: 860px) {
+      section { padding: 66px 0; }
+      .hero-grid, .about-grid, .contact-box { grid-template-columns: 1fr; }
+      .photo-wrap { order: -1; width: min(270px, 72%); }
+      .menu-btn { display: grid; }
+      .nav-links { position: absolute; top: 68px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 20px 16px; display: none; }
+      .nav-links.open { display: flex; }
+      .nav-cta { display: none; }
+      .tag-1 { left: -8px; } .tag-2 { right: -8px; }
+      .timeline { padding-left: 28px; }
+      .t-item::before { left: -27px; }
+      .cert { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress"></div>
+  <div id="cursorGlow"></div>
+
+  <header>
+    <nav class="container">
+      <a href="#top" class="logo">Ariando<span>.</span></a>
+      <div class="nav-right">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#about">Tentang</a></li>
+          <li><a href="#org">Organisasi</a></li>
+          <li><a href="#skill">Skill</a></li>
+          <li><a href="#cert">Sertifikasi</a></li>
+          <li><a href="#contact" class="btn btn-primary nav-cta">Kontak →</a></li>
+        </ul>
+        <button class="icon-btn" id="themeBtn" aria-label="Ganti tema">🌙</button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Buka menu" aria-expanded="false">☰</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="blob b1"></div><div class="blob b2"></div>
+      <div class="container hero-grid">
+        <div class="reveal">
+          <div class="badge">Open to Internship</div>
+          <p class="hello">Halo, saya</p>
+          <h1><span class="grad">Ariando</span> Ariel Christian</h1>
+          <div class="typing"><span class="role" id="typed"></span><span class="caret"></span></div>
+          <p class="lead">
+            Mahasiswa D3 Akuntansi yang tertarik pada pencatatan keuangan, analisis data, dan administrasi organisasi.
+            Terbiasa mengelola kas, dokumen, dan logistik kegiatan dari persiapan hingga pelaporan.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">Hubungi saya →</a>
+            <a href="#org" class="btn btn-ghost">Lihat pengalaman</a>
+          </div>
+          <div class="stats">
+            <div class="stat"><b data-count="5">0</b><span>Peran kepanitiaan</span></div>
+            <div class="stat"><b data-count="1">0</b><span>Sertifikasi</span></div>
+            <div class="stat"><b>D3</b><span>Akuntansi</span></div>
+          </div>
+        </div>
+
+        <div class="photo-wrap reveal" style="--d:.15s">
+          <div class="photo-ring"></div>
+          <div class="photo" id="tilt">
+            <!-- Simpan foto kamu di folder yang sama dengan nama: foto.jpg -->
+            <img src="foto.jpg" alt="Foto Ariando Ariel Christian" onerror="this.remove()" />
+            <div>🧑‍💼<br /><small>Taruh foto.jpg di folder yang sama</small></div>
+          </div>
+          <div class="float-tag tag-1">🎓 Politeknik Negeri Malang</div>
+          <div class="float-tag tag-2">📊 Data Analyst ACCA</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track" id="marqueeTrack">
+        <span>Akuntansi</span><span>Excel Advance</span><span>Analisis Data</span><span>Pencatatan Kas</span><span>Administrasi</span><span>Public Speaking</span><span>Koordinasi Tim</span><span>Logistik</span>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container about-grid">
+        <div class="reveal">
+          <p class="eyebrow">Tentang saya</p>
+          <h2>Mahasiswa akuntansi yang siap berkontribusi nyata</h2>
+          <p>Saya Ariando, mahasiswa D3 Akuntansi di Politeknik Negeri Malang. Saya aktif di kegiatan kampus dengan peran yang dekat dengan bidang saya: bendahara, sekretaris, koordinator perlengkapan, dan MC.</p>
+          <p>Dari sana saya terbiasa mencatat kas masuk dan keluar, menyusun surat dan laporan pertanggungjawaban, serta mengoordinasikan logistik dalam tim. Saya juga terus belajar analisis data dan Excel untuk mendukung pekerjaan akuntansi.</p>
+        </div>
+        <div class="info-card reveal" style="--d:.15s">
+          <div class="info-row"><span>Institusi</span><span>Politeknik Negeri Malang</span></div>
+          <div class="info-row"><span>Program Studi</span><span>D3 Akuntansi</span></div>
+          <div class="info-row"><span>IPK</span><span>2,81 / 4,00</span></div>
+          <div class="info-row"><span>Sertifikasi</span><span>Data Analyst (ACCA)</span></div>
+          <div class="info-row"><span>Lokasi</span><span>Malang, Indonesia</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORGANISASI -->
+    <section id="org" class="alt">
+      <div class="container">
+        <p class="eyebrow reveal">Pengalaman organisasi</p>
+        <h2 class="reveal">Kepemimpinan &amp; Kepanitiaan</h2>
+
+        <div class="filters reveal" id="filters">
+          <button class="f-btn active" data-f="all">Semua</button>
+          <button class="f-btn" data-f="keuangan">Keuangan</button>
+          <button class="f-btn" data-f="administrasi">Administrasi</button>
+          <button class="f-btn" data-f="logistik">Logistik</button>
+          <button class="f-btn" data-f="speaking">Public Speaking</button>
+        </div>
+
+        <div class="timeline">
+          <article class="t-item reveal" data-cat="keuangan">
+            <div class="t-head">
+              <div><span class="t-tag">Keuangan</span><h3>Bendahara</h3><div class="t-org">Kegiatan Mentoring</div></div>
+              <span class="chev">⌄</span>
+            </div>
+            <div class="t-body"><div><p>Mengelola anggaran dan pencatatan kas masuk dan keluar seluruh rangkaian acara mentoring.</p></div></div>
+          </article>
+
+          <article class="t-item reveal" data-cat="administrasi">
+            <div class="t-head">
+              <div><span class="t-tag">Administrasi</span><h3>Sekretaris</h3><div class="t-org">Kegiatan Camp Mahasiswa Baru</div></div>
+              <span class="chev">⌄</span>
+            </div>
+            <div class="t-body"><div><p>Menyusun administrasi surat-menyurat dan laporan pertanggungjawaban kegiatan.</p></div></div>
+          </article>
+
+          <article class="t-item reveal" data-cat="speaking">
+            <div class="t-head">
+              <div><span class="t-tag">Public Speaking</span><h3>MC (Master of Ceremony)</h3><div class="t-org">Kegiatan Penerimaan Mahasiswa dan Mentoring</div></div>
+              <span class="chev">⌄</span>
+            </div>
+            <div class="t-body"><div><p>Memandu jalannya acara Penerimaan Mahasiswa dan Mentoring, memastikan rundown berjalan lancar dari awal hingga akhir.</p></div></div>
+          </article>
+
+          <article class="t-item reveal" data-cat="logistik">
+            <div class="t-head">
+              <div><span class="t-tag">Logistik</span><h3>Koordinator Sie Perkap</h3><div class="t-org">Seksi Perlengkapan</div></div>
+              <span class="chev">⌄</span>
+            </div>
+            <div class="t-body"><div><p>Mengoordinasikan pengadaan, inventarisasi, dan distribusi seluruh perlengkapan serta logistik yang dibutuhkan demi kelancaran jalannya acara.</p></div></div>
+          </article>
+
+          <article class="t-item reveal" data-cat="logistik">
+            <div class="t-head">
+              <div><span class="t-tag">Logistik</span><h3>Volunteer BEM Sie Perkap</h3><div class="t-org">EXPO</div></div>
+              <span class="chev">⌄</span>
+            </div>
+            <div class="t-body"><div><p>Mengoordinasikan kesiapan tim perlengkapan pada kegiatan BEM Sie Perkap EXPO.</p></div></div>
+          </article>
+        </div>
+        <p class="hint">Klik kartu untuk melihat detail tugas.</p>
+      </div>
+    </section>
+
+    <!-- SKILL -->
+    <section id="skill">
+      <div class="container">
+        <p class="eyebrow reveal">Kemampuan</p>
+        <h2 class="reveal">Skill &amp; Tools</h2>
+
+        <div class="tabs reveal" id="tabs" role="tablist">
+          <button class="tab active" data-t="hard">Akuntansi &amp; Data</button>
+          <button class="tab" data-t="admin">Administrasi</button>
+          <button class="tab" data-t="soft">Komunikasi &amp; Bahasa</button>
+        </div>
+
+        <div class="skill-panel active" id="hard">
+          <div class="skill"><div class="ic">📈</div><div><b>Excel Advance</b><small>Pengolahan &amp; analisis data</small></div></div>
+          <div class="skill"><div class="ic">🔍</div><div><b>Analisis Data</b><small>Sertifikasi ACCA</small></div></div>
+          <div class="skill"><div class="ic">💰</div><div><b>Pencatatan Kas</b><small>Kas masuk &amp; keluar</small></div></div>
+          <div class="skill"><div class="ic">🧾</div><div><b>Penyusunan Anggaran</b><small>Perencanaan biaya kegiatan</small></div></div>
+        </div>
+        <div class="skill-panel" id="admin">
+          <div class="skill"><div class="ic">✉️</div><div><b>Surat-Menyurat</b><small>Administrasi kegiatan</small></div></div>
+          <div class="skill"><div class="ic">📑</div><div><b>Laporan LPJ</b><small>Pertanggungjawaban kegiatan</small></div></div>
+          <div class="skill"><div class="ic">📦</div><div><b>Inventarisasi</b><small>Pendataan perlengkapan</small></div></div>
+          <div class="skill"><div class="ic">🚚</div><div><b>Koordinasi Logistik</b><small>Pengadaan &amp; distribusi</small></div></div>
+        </div>
+        <div class="skill-panel" id="soft">
+          <div class="skill"><div class="ic">💬</div><div><b>Komunikasi</b><small>Antar tim &amp; panitia</small></div></div>
+          <div class="skill"><div class="ic">🎤</div><div><b>Public Speaking</b><small>Pengalaman sebagai MC</small></div></div>
+          <div class="skill"><div class="ic">🤝</div><div><b>Kerja Tim</b><small>Kepanitiaan lintas seksi</small></div></div>
+          <div class="skill"><div class="ic">🌐</div><div><b>English</b><small>Beginner</small><div class="dots"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERTIFIKASI -->
+    <section id="cert" class="alt">
+      <div class="container">
+        <p class="eyebrow reveal">Pencapaian</p>
+        <h2 class="reveal">Sertifikasi</h2>
+        <div class="cert reveal">
+          <div class="medal">🏅</div>
+          <div>
+            <h3>Data Analyst</h3>
+            <p>ACCA (Association of Chartered Certified Accountants)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTAK -->
+    <section id="contact">
+      <div class="container">
+        <div class="contact-box reveal">
+          <div>
+            <p class="eyebrow">Kontak</p>
+            <h2>Mari kita <em>terhubung.</em></h2>
+            <p>Terbuka untuk diskusi, kolaborasi, dan peluang magang. Jangan ragu menghubungi saya melalui platform mana pun.</p>
+          </div>
+          <div class="contact-links">
+            <button class="c-link" id="copyEmail" data-email="ariandoariell@gmail.com"><span><small>Email (klik untuk salin)</small>ariandoariell@gmail.com</span><span class="arr">⧉</span></button>
+            <a class="c-link" href="https://wa.me/62895365109500" target="_blank" rel="noopener"><span><small>WhatsApp</small>0895-3651-09500</span><span class="arr">→</span></a>
+            <a class="c-link" href="https://linkedin.com/in/ariando-ariell" target="_blank" rel="noopener"><span><small>LinkedIn</small>Ariando Ariell</span><span class="arr">→</span></a>
+            <a class="c-link" href="https://instagram.com/ariandooooo_" target="_blank" rel="noopener"><span><small>Instagram</small>@ariandooooo_</span><span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="container">© <span id="year">2026</span> Ariando Ariel Christian · Made with care</div></footer>
+
+  <button class="icon-btn" id="toTop" aria-label="Kembali ke atas">↑</button>
+  <div id="toast" role="status"></div>
+
+  <script>
+    const $ = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* Tema */
+    const root = document.documentElement, themeBtn = $('#themeBtn');
+    function setTheme(t) { root.dataset.theme = t; themeBtn.textContent = t === 'dark' ? '☀️' : '🌙'; try { localStorage.setItem('theme', t); } catch (e) {} }
+    let saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {}
+    setTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+    themeBtn.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+    /* Menu mobile */
+    const menuBtn = $('#menuBtn'), navLinks = $('#navLinks');
+    menuBtn.addEventListener('click', () => { const o = navLinks.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', o); });
+    $$('#navLinks a').forEach(a => a.addEventListener('click', () => { navLinks.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }));
+
+    /* Scroll: progress bar, tombol atas */
+    const bar = $('#progress'), toTop = $('#toTop');
+    addEventListener('scroll', () => {
+      const h = document.documentElement.scrollHeight - innerHeight;
+      bar.style.width = (h > 0 ? scrollY / h * 100 : 0) + '%';
+      toTop.classList.toggle('show', scrollY > 600);
+    }, { passive: true });
+    toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
+
+    /* Cahaya mengikuti kursor */
+    const glow = $('#cursorGlow');
+    addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; }, { passive: true });
+
+    /* Efek mengetik */
+    const roles = ['Mahasiswa D3 Akuntansi', 'Data Analyst (ACCA)', 'Bendahara & Sekretaris Kegiatan', 'Open to Internship'];
+    const typed = $('#typed');
+    if (reduce) { typed.textContent = roles[0]; } else {
+      let ri = 0, ci = 0, del = false;
+      (function tick() {
+        const word = roles[ri];
+        typed.textContent = word.slice(0, ci);
+        if (!del && ci < word.length) { ci++; setTimeout(tick, 70); }
+        else if (!del) { del = true; setTimeout(tick, 1600); }
+        else if (ci > 0) { ci--; setTimeout(tick, 35); }
+        else { del = false; ri = (ri + 1) % roles.length; setTimeout(tick, 300); }
+      })();
+    }
+
+    /* Tilt 3D pada foto */
+    const tilt = $('#tilt');
+    if (!reduce && matchMedia('(hover: hover)').matches) {
+      tilt.addEventListener('mousemove', e => {
+        const r = tilt.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        tilt.style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 14}deg) scale(1.02)`;
+      });
+      tilt.addEventListener('mouseleave', () => { tilt.style.transform = ''; });
+    }
+
+    /* Marquee: gandakan isi agar mulus */
+    const track = $('#marqueeTrack');
+    track.innerHTML += track.innerHTML;
+
+    /* Reveal + counter */
+    function countUp(el) {
+      const target = +el.dataset.count; let n = 0;
+      const step = () => { n++; el.textContent = n; if (n < target) setTimeout(step, 180); };
+      if (reduce) el.textContent = target; else step();
+    }
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      $$('[data-count]', e.target).forEach(countUp);
+      io.unobserve(e.target);
+    }), { threshold: .12 });
+    $$('.reveal').forEach(el => io.observe(el));
+
+    /* Nav aktif sesuai bagian */
+    const links = $$('#navLinks a[href^="#"]:not(.btn)');
+    const so = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }), { rootMargin: '-45% 0px -50% 0px' });
+    ['about', 'org', 'skill', 'cert'].forEach(id => so.observe(document.getElementById(id)));
+
+    /* Timeline: buka-tutup + filter */
+    $$('.t-item').forEach(it => it.addEventListener('click', () => it.classList.toggle('open')));
+    $$('.f-btn').forEach(b => b.addEventListener('click', () => {
+      $$('.f-btn').forEach(x => x.classList.remove('active')); b.classList.add('active');
+      $$('.t-item').forEach(it => it.classList.toggle('hide', b.dataset.f !== 'all' && it.dataset.cat !== b.dataset.f));
+    }));
+
+    /* Tab skill */
+    $$('.tab').forEach(t => t.addEventListener('click', () => {
+      $$('.tab').forEach(x => x.classList.remove('active')); t.classList.add('active');
+      $$('.skill-panel').forEach(p => p.classList.toggle('active', p.id === t.dataset.t));
+    }));
+
+    /* Salin email + toast */
+    const toast = $('#toast'); let tt;
+    function showToast(msg) { toast.textContent = msg; toast.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove('show'), 2200); }
+    $('#copyEmail').addEventListener('click', async e => {
+      const mail = e.currentTarget.dataset.email;
+      try { await navigator.clipboard.writeText(mail); showToast('Email disalin ✓'); }
+      catch (err) { location.href = 'mailto:' + mail; }
+    });
+  </script>
+</body>
+</html>
